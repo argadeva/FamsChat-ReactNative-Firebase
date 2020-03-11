@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "312304824271",
+    "firebase_url": "https://famschat.firebaseio.com",
+    "project_id": "famschat",
+    "storage_bucket": "famschat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:312304824271:android:c334b070b450a1fc8e2cba",
+        "android_client_info": {
+          "package_name": "com.batihchatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "312304824271-ghd6bo0rsaon6jphv262qmd2nqc56mti.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.batihchatapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "312304824271-5p8umolp7p309i0fhhv7a92jogq02gmb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCV_A6ivs27kFhMlPjUaFc_iz5PWvhK7Mo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "312304824271-5p8umolp7p309i0fhhv7a92jogq02gmb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
