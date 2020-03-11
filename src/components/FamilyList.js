@@ -22,8 +22,9 @@ import {
   Input,
   H3,
 } from 'native-base';
-import {Modal} from 'react-native';
 import firebase from 'react-native-firebase';
+import Modal from 'react-native-modal';
+import {TouchableOpacity} from 'react-native';
 
 class FamilyList extends Component {
   state = {
@@ -136,6 +137,7 @@ class FamilyList extends Component {
           {
             message: "I'm accept your friend request!",
             sender: this.state.email,
+            timestamp: Date.now(),
           },
         ],
         users: users,
@@ -188,7 +190,7 @@ class FamilyList extends Component {
             {this.state.friends.map((_friend, _index) => {
               return (
                 <List key={_index}>
-                  <ListItem avatar>
+                  <ListItem avatar noBorder>
                     <Left>
                       <Thumbnail
                         source={{
@@ -203,7 +205,7 @@ class FamilyList extends Component {
                           _friend => _friend !== this.state.email,
                         )}
                       </Text>
-                      <Text note>Request is send, waiting Approval</Text>
+                      <Text note>Awaiting approval</Text>
                     </Body>
                     {_friend.email === this.state.email && (
                       <Right>
@@ -222,20 +224,21 @@ class FamilyList extends Component {
         ) : null}
         <View style={{flex: 1}}>
           <Fab
-            style={{backgroundColor: '#5067FF'}}
+            style={{backgroundColor: '#2196f3'}}
             position="bottomRight"
             onPress={() => this.setState({modal: true})}>
             <Icon name="ios-person-add" />
           </Fab>
         </View>
         <Modal
-          animationType="slide"
-          transparent={false}
-          visible={this.state.modal}>
-          <Button transparent onPress={() => this.setState({modal: false})}>
-            <Icon name="close" />
-          </Button>
-          <Content style={{padding: 50}}>
+          style={{justifyContent: 'flex-end'}}
+          onSwipeComplete={() =>
+            this.setState({modal: false, modalWarning: ''})
+          }
+          swipeDirection={['left', 'right', 'down']}
+          isVisible={this.state.modal}>
+          <View
+            style={{backgroundColor: '#fff', padding: 30, borderRadius: 20}}>
             <H3 style={{alignSelf: 'center', marginBottom: 10}}>ADD FAMILY</H3>
             {this.state.modalWarning !== '' && (
               <Text note style={{alignSelf: 'center', color: 'red'}}>
@@ -249,10 +252,17 @@ class FamilyList extends Component {
                 onChangeText={text => this.setState({modalText: text})}
               />
             </Item>
-            <Button rounded onPress={() => this.addFriend()}>
-              <Text>Primary</Text>
-            </Button>
-          </Content>
+            <TouchableOpacity onPress={() => this.addFriend()}>
+              <Button
+                rounded
+                style={{
+                  backgroundColor: '#e91e63',
+                  justifyContent: 'center',
+                }}>
+                <Text>ADD</Text>
+              </Button>
+            </TouchableOpacity>
+          </View>
         </Modal>
       </>
     );

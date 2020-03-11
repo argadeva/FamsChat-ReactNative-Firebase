@@ -112,8 +112,11 @@ class Home extends Component {
   render() {
     return (
       <Container>
-        <Header hasTabs>
-          <Left>
+        <Header
+          hasTabs
+          androidStatusBarColor="#e91e63"
+          style={{backgroundColor: '#e91e63'}}>
+          <Left style={{paddingLeft: 10}}>
             <Title>FamsChat</Title>
           </Left>
           <Right>
@@ -123,27 +126,32 @@ class Home extends Component {
             </Button>
           </Right>
         </Header>
-        <Tabs initialPage={1}>
+        <Tabs
+          initialPage={1}
+          tabBarUnderlineStyle={{backgroundColor: '#ffba00'}}
+          tabContainerStyle={{
+            elevation: 0,
+          }}>
           <Tab
             heading={
-              <TabHeading>
-                <Text>FAMILY</Text>
+              <TabHeading style={{backgroundColor: '#e91e63'}}>
+                <Text style={{color: '#fff'}}>FAMILY</Text>
               </TabHeading>
             }>
             <FamilyView screen={this.props} />
           </Tab>
           <Tab
             heading={
-              <TabHeading>
-                <Text>CHAT</Text>
+              <TabHeading style={{backgroundColor: '#e91e63'}}>
+                <Text style={{color: '#fff'}}>CHAT</Text>
               </TabHeading>
             }>
             <ChatsList screen={this.props} />
           </Tab>
           <Tab
             heading={
-              <TabHeading>
-                <Text>MAPS</Text>
+              <TabHeading style={{backgroundColor: '#e91e63'}}>
+                <Text style={{color: '#fff'}}>MAPS</Text>
               </TabHeading>
             }>
             <Maps data={this.state} />

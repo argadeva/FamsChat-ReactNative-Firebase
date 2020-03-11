@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import firebase from 'react-native-firebase';
+import {Thumbnail, Text} from 'native-base';
 
 class Maps extends Component {
   state = {
@@ -73,8 +74,19 @@ class Maps extends Component {
                         latitude: friend.lat,
                         longitude: friend.lng,
                       }}
-                      title={friend.name}
-                    />
+                      title={friend.name}>
+                      <Thumbnail
+                        style={{
+                          borderWidth: 2,
+                          borderColor: '#fff',
+                          width: 50,
+                          height: 50,
+                        }}
+                        source={{
+                          uri: 'https://dummyimage.com/600x400/ff00ff/fff',
+                        }}
+                      />
+                    </Marker>
                   );
                 })}
               </>

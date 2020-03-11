@@ -76,6 +76,7 @@ class ChatsList extends Component {
               return (
                 <List key={_index}>
                   <ListItem
+                    noBorder
                     avatar
                     button
                     onPress={() => this.selectedChat(_chat.users, _index)}>
