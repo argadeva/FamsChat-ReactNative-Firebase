@@ -1,31 +1,15 @@
 import React, {Component} from 'react';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
-import Geolocation from 'react-native-geolocation-service';
 import firebase from 'react-native-firebase';
 import {Thumbnail, Text} from 'native-base';
 
 class Maps extends Component {
   state = {
-    lat: null,
-    lng: null,
+    lat: -6.391982,
+    lng: 106.826729,
     friends: [],
     users: [],
   };
-
-  // getGeolocation = () => {
-  //   Geolocation.getCurrentPosition(
-  //     position => {
-  //       this.setState({
-  //         lat: position.coords.latitude,
-  //         lng: position.coords.longitude,
-  //       });
-  //     },
-  //     error => {
-  //       console.log(error.code, error.message);
-  //     },
-  //     {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-  //   );
-  // };
 
   getFriendLocation = () => {
     firebase.auth().onAuthStateChanged(async _usr => {
@@ -74,19 +58,9 @@ class Maps extends Component {
                         latitude: friend.lat,
                         longitude: friend.lng,
                       }}
-                      title={friend.name}>
-                      <Thumbnail
-                        style={{
-                          borderWidth: 2,
-                          borderColor: '#fff',
-                          width: 50,
-                          height: 50,
-                        }}
-                        source={{
-                          uri: 'https://dummyimage.com/600x400/ff00ff/fff',
-                        }}
-                      />
-                    </Marker>
+                      title={friend.name}
+                      description={friend.email}
+                    />
                   );
                 })}
               </>

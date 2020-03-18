@@ -18,21 +18,32 @@ import {
   Thumbnail,
   View,
   Fab,
+  H3,
+  Item,
+  Input,
 } from 'native-base';
 import Maps from '../components/Maps';
 import firebase from 'react-native-firebase';
 import ChatsList from '../components/ChatsList';
 import FamilyView from '../components/FamilyList';
 import Geolocation from 'react-native-geolocation-service';
+import Modal from 'react-native-modal';
 
 class Home extends Component {
   state = {
     lat: null,
     lng: null,
+    modal: false,
   };
 
   signOutUser = async () => {
-    await firebase.auth().signOut();
+    await firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        this.setState({modal: false});
+        this.props.navigation.replace('SplashScreen');
+      });
   };
 
   getNotif = () => {
@@ -52,7 +63,7 @@ class Home extends Component {
         if (Platform.OS == 'android') {
           notification_to_be_displayed.android
             .setPriority(firebase.notifications.Android.Priority.High)
-            .android.setChannelId('Default')
+            .android.setChannelId('DefaultChannel')
             .android.setVibrate(1000);
         }
 
@@ -63,8 +74,9 @@ class Home extends Component {
   };
 
   getGeolocation = () => {
-    Geolocation.getCurrentPosition(
+    Geolocation.watchPosition(
       position => {
+        this.sendData(position);
         this.setState({
           lat: position.coords.latitude,
           lng: position.coords.longitude,
@@ -73,11 +85,16 @@ class Home extends Component {
       error => {
         console.log(error.code, error.message);
       },
-      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        distanceFilter: 1,
+        useSignificantChanges: true,
+      },
     );
   };
 
-  sendData = async () => {
+  sendData = async position => {
     const enable = firebase.messaging().hasPermission();
     if (enable) {
       const fcmToken = await firebase.messaging().getToken();
@@ -88,8 +105,8 @@ class Home extends Component {
           .doc(_usr.email)
           .update({
             notifId: fcmToken,
-            lat: this.state.lat,
-            lng: this.state.lng,
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
           });
       });
     } else {
@@ -104,9 +121,6 @@ class Home extends Component {
   async componentDidMount() {
     await this.getGeolocation();
     await this.getNotif();
-    setTimeout(() => {
-      this.sendData();
-    }, 3000);
   }
 
   render() {
@@ -120,9 +134,9 @@ class Home extends Component {
             <Title>FamsChat</Title>
           </Left>
           <Right>
-            <Button transparent onPress={() => this.signOutUser()}>
-              <Icon name="ios-person" />
-              <Text>MY PROFILE</Text>
+            <Button transparent onPress={() => this.setState({modal: true})}>
+              <Icon name="ios-log-out" />
+              <Text>Sign Out</Text>
             </Button>
           </Right>
         </Header>
@@ -157,6 +171,46 @@ class Home extends Component {
             <Maps data={this.state} />
           </Tab>
         </Tabs>
+        <Modal
+          style={{justifyContent: 'flex-end'}}
+          onSwipeComplete={() => this.setState({modal: false})}
+          swipeDirection={['left', 'right', 'down']}
+          isVisible={this.state.modal}>
+          <View
+            style={{backgroundColor: '#fff', padding: 30, borderRadius: 20}}>
+            <Text
+              note
+              style={{alignSelf: 'center', color: 'red', marginBottom: 30}}>
+              Are you sure you want to logout?
+            </Text>
+            <View style={{flex: 1, flexDirection: 'row', marginBottom: 30}}>
+              <Button
+                onPress={() => this.setState({modal: false})}
+                rounded
+                small
+                style={{
+                  backgroundColor: '#2196f3',
+                  justifyContent: 'center',
+                  flex: 1,
+                  marginHorizontal: 10,
+                }}>
+                <Text>Cancel</Text>
+              </Button>
+              <Button
+                onPress={() => this.signOutUser()}
+                rounded
+                small
+                style={{
+                  backgroundColor: '#e91e63',
+                  justifyContent: 'center',
+                  flex: 1,
+                  marginHorizontal: 10,
+                }}>
+                <Text>Logout</Text>
+              </Button>
+            </View>
+          </View>
+        </Modal>
       </Container>
     );
   }

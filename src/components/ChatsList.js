@@ -9,22 +9,20 @@ import {
   ListItem,
   Thumbnail,
   Badge,
+  Button,
 } from 'native-base';
 import firebase from 'react-native-firebase';
 
 class ChatsList extends Component {
   state = {
-    selectedChat: null,
     email: '',
     chats: [],
   };
 
-  selectedChat = async (data, index) => {
-    await this.setState({selectedChat: index});
-    await this.props.screen.navigation.navigate('ChatView', {
+  selectedChat = data => {
+    this.props.screen.navigation.navigate('ChatView', {
       user: data,
     });
-    this.messageRead();
   };
 
   componentDidMount() {
@@ -43,29 +41,27 @@ class ChatsList extends Component {
     });
   }
 
-  buildDocKey = friend => [this.state.email, friend].sort().join(':');
+  // buildDocKey = friend => [this.state.email, friend].sort().join(':');
 
-  messageRead = () => {
-    const docKey = this.buildDocKey(
-      this.state.chats[this.state.selectedChat].users.filter(
-        _usr => _usr !== this.state.email,
-      )[0],
-    );
+  // messageRead = () => {
+  //   const docKey = this.buildDocKey(
+  //     this.state.chats[this.state.selectedChat].users.filter(
+  //       _usr => _usr !== this.state.email,
+  //     )[0],
+  //   );
 
-    if (
-      this.state.chats[this.state.selectedChat].messages[
-        this.state.chats[this.state.selectedChat].messages.length - 1
-      ].sender !== this.state.email
-    ) {
-      firebase
-        .firestore()
-        .collection('chats')
-        .doc(docKey)
-        .update({receiverHasRead: 0});
-    } else {
-      console.log('Clicked message sender!');
-    }
-  };
+  //   if (
+  //     this.state.chats[this.state.selectedChat].messages[
+  //       this.state.chats[this.state.selectedChat].messages.length - 1
+  //     ].sender !== this.state.email
+  //   ) {
+  //     firebase
+  //       .firestore()
+  //       .collection('chats')
+  //       .doc(docKey)
+  //       .update({receiverHasRead: 0});
+  //   }
+  // };
 
   render() {
     return (
@@ -79,15 +75,15 @@ class ChatsList extends Component {
                     noBorder
                     avatar
                     button
-                    onPress={() => this.selectedChat(_chat.users, _index)}>
-                    <Left>
+                    onPress={() => this.selectedChat(_chat.users)}>
+                    {/* <Left>
                       <Thumbnail
                         source={{
                           uri:
                             'https://dummyimage.com/300x300/008cff/ffffff.jpg',
                         }}
                       />
-                    </Left>
+                    </Left> */}
                     <Body>
                       <Text>
                         {_chat.users.filter(
@@ -104,9 +100,11 @@ class ChatsList extends Component {
                       {_chat.receiverHasRead > 0 &&
                       _chat.messages[_chat.messages.length - 1].sender !==
                         this.state.email ? (
-                        <Badge>
-                          <Text>{_chat.receiverHasRead}</Text>
-                        </Badge>
+                        <Button transparent>
+                          <Badge style={{backgroundColor: '#2196f3'}}>
+                            <Text>{_chat.receiverHasRead}</Text>
+                          </Badge>
+                        </Button>
                       ) : null}
                     </Right>
                   </ListItem>
@@ -114,7 +112,11 @@ class ChatsList extends Component {
               );
             })}
           </Content>
-        ) : null}
+        ) : (
+          <Text style={{textAlign: 'center', padding: 30}}>
+            You don't have chat!
+          </Text>
+        )}
       </>
     );
   }

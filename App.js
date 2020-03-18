@@ -14,7 +14,7 @@ import ChatView from './src/components/ChatView';
 const App = () => {
   return (
     <NavigationContainer>
-      <StatusBar backgroundColor="#083D77" barStyle="light-content" />
+      <StatusBar backgroundColor="#e91e63" barStyle="light-content" />
       <Stack.Navigator
         initialRouteName="SplashScreen"
         screenOptions={{headerShown: false}}>

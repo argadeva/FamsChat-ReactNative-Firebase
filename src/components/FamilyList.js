@@ -25,6 +25,7 @@ import {
 import firebase from 'react-native-firebase';
 import Modal from 'react-native-modal';
 import {TouchableOpacity} from 'react-native';
+import Axios from 'axios';
 
 class FamilyList extends Component {
   state = {
@@ -120,11 +121,19 @@ class FamilyList extends Component {
         status: false,
         users: [this.state.email, this.state.modalText],
       })
-      .then(() =>
+      .then(() => {
         this.setState({
           modal: false,
         }),
-      );
+          firebase
+            .firestore()
+            .collection('users')
+            .doc(this.state.modalText)
+            .get()
+            .then(res => {
+              this.sendNotif(res.data().notifId, 'New friend request!');
+            });
+      });
   };
 
   createChat = (docKey, users) => {
@@ -145,7 +154,34 @@ class FamilyList extends Component {
       });
   };
 
+  sendNotif = (key, txt) => {
+    Axios.post(
+      'https://fcm.googleapis.com/fcm/send',
+      {
+        to: key,
+        content_available: true,
+        notification: {
+          title: this.state.email,
+          body: txt,
+          priority: 'high',
+          sound: 'Default',
+          android_channel_id: 'DefaultChannel',
+        },
+        data: {
+          channelId: 'DefaultChannel',
+        },
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'key=AIzaSyC1SMoSO77oXENklPD6M5KpnS_E7kRtpgo',
+        },
+      },
+    );
+  };
+
   onConfirm = data => {
+    const getNotif = data.users.filter(data => data !== this.state.email)[0];
     const docKey = data.users.sort().join(':');
     firebase
       .firestore()
@@ -170,6 +206,17 @@ class FamilyList extends Component {
             friends: firebase.firestore.FieldValue.arrayUnion(this.state.email),
           });
         this.createChat(docKey, data.users);
+        firebase
+          .firestore()
+          .collection('users')
+          .doc(getNotif)
+          .get()
+          .then(res => {
+            this.sendNotif(
+              res.data().notifId,
+              "I'm accept your friend request!",
+            );
+          });
       });
   };
 
@@ -191,14 +238,14 @@ class FamilyList extends Component {
               return (
                 <List key={_index}>
                   <ListItem avatar noBorder>
-                    <Left>
+                    {/* <Left>
                       <Thumbnail
                         source={{
                           uri:
                             'https://dummyimage.com/300x300/008cff/ffffff.jpg',
                         }}
                       />
-                    </Left>
+                    </Left> */}
                     <Body>
                       <Text>
                         {_friend.users.filter(
@@ -221,7 +268,11 @@ class FamilyList extends Component {
               );
             })}
           </Content>
-        ) : null}
+        ) : (
+          <Text style={{textAlign: 'center', padding: 30}}>
+            You don't have request!
+          </Text>
+        )}
         <View style={{flex: 1}}>
           <Fab
             style={{backgroundColor: '#2196f3'}}

@@ -43,10 +43,23 @@ export default class ChatView extends Component {
               .toString(),
             chats: chats[0].messages,
           });
-          this.getIdNotif();
+          await this.messageRead();
         });
     });
   }
+
+  messageRead = () => {
+    const docKey = [this.state.email, this.state.friend].sort().join(':');
+    const check =
+      this.state.chats[this.state.chats.length - 1].sender !== this.state.email;
+    if (check) {
+      firebase
+        .firestore()
+        .collection('chats')
+        .doc(docKey)
+        .update({receiverHasRead: 0});
+    }
+  };
 
   getIdNotif = () => {
     firebase
@@ -72,6 +85,10 @@ export default class ChatView extends Component {
           body: this.state.keep,
           priority: 'high',
           sound: 'Default',
+          android_channel_id: 'DefaultChannel',
+        },
+        data: {
+          channelId: 'DefaultChannel',
         },
       },
       {
@@ -84,6 +101,7 @@ export default class ChatView extends Component {
   };
 
   SendText = () => {
+    this.getIdNotif();
     if (this.state.chatText !== '') {
       this.setState({
         keep: this.state.chatText,
@@ -102,13 +120,11 @@ export default class ChatView extends Component {
           receiverHasRead: firebase.firestore.FieldValue.increment(1),
         })
         .then(() => {
-          this.setState({
-            chatText: '',
-          });
-        })
-        .then(() => {
           this.sendNotif();
         });
+      this.setState({
+        chatText: '',
+      });
     }
   };
 
@@ -146,11 +162,7 @@ export default class ChatView extends Component {
             <Body>
               <Title>{this.state.friend}</Title>
             </Body>
-            <Right>
-              <Button transparent>
-                <Icon name="menu" />
-              </Button>
-            </Right>
+            <Right />
           </Header>
           {this.state.chats.length > 0 && (
             <ScrollView

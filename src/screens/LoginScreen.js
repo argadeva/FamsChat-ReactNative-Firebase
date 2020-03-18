@@ -25,7 +25,7 @@ export default class LoginScreen extends Component {
       .auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(() => {
-        console.log('Success!');
+        this.props.navigation.replace('HomeScreen');
       })
       .catch(error => {
         this.setState({errorMessage: error.toString()});
@@ -42,7 +42,14 @@ export default class LoginScreen extends Component {
             width: '100%',
             height: '100%',
           }}>
-          <Content style={{marginTop: 230}}>
+          <Content
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              width: '100%',
+              padding: 45,
+              backgroundColor: '#fff',
+            }}>
             {this.state.errorMessage !== null && (
               <Text
                 note
@@ -54,7 +61,7 @@ export default class LoginScreen extends Component {
                 {this.state.errorMessage}
               </Text>
             )}
-            <Form style={{paddingHorizontal: 30, marginTop: 20}}>
+            <Form>
               <Item rounded>
                 <Input
                   autoCompleteType="email"
