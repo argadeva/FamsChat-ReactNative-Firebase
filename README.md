@@ -6,6 +6,12 @@
   <br>
 </h1>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Node.js-v12.14.1-success">
+  <img src="https://img.shields.io/badge/ReactNative-v0.61.5-informational">
+  <img src="https://img.shields.io/badge/ReactNativeFirebase-v5.6.0-orange">
+</p>
+
 ## Table of Contents
 
 - [Introduction](#introduction)
