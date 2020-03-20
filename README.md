@@ -6,23 +6,16 @@
   <br>
 </h1>
 
-<h5 align="center">FamsChat Mobile App is Real Time Chat Mobile App for family. This app written in React Native as front-end, Firebase Firestore as back-end with Cloud Messaging as Push Notification.</h5>
+## Table of Contents
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Node.js-v12.14.1-success">
-  <img src="https://img.shields.io/badge/ReactNative-v0.61.5-informational">
-  <img src="https://img.shields.io/badge/ReactNativeFirebase-v5.6.0-orange">
-  <img src="https://img.shields.io/badge/ReactNativeMaps-v0.26.1-orange">
-</p>
+- [Introduction](#introduction)
+- [Demo](#demo)
+- [How To Install](#how-to-install)
+- [Release APK](#release-apk)
 
-<p align="center">
-  <a href="#feature">Feature</a> •
-  <a href="#demo">Demo</a> •
-  <a href="#how-to-use">How To Use</a> •
-  <a href="#release-apk">Release APK</a>
-</p>
+## Introduction
 
-## Feature
+FamsChat Mobile App is Real Time Chat Mobile App for family. This app written in React Native as front-end, Firebase Firestore as back-end with Cloud Messaging as Push Notification. The main features are:
 
 - Login and Register
 - Realtime Chat
@@ -35,9 +28,11 @@
 
 ## Demo
 
-![demo](https://github.com/argadeva/FamsChat-ReactNative-Firebase/raw/master/demo/demo.gif)
+<p align="center">
+ <img src="https://github.com/argadeva/FamsChat-ReactNative-Firebase/raw/master/demo/demo.gif" />
+</p>
 
-## How To Use
+## How To Install
 
 1. Clone this repository
    ```
