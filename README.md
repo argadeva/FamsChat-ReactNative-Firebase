@@ -35,7 +35,9 @@ FamsChat Mobile App is Real Time Chat Mobile App for family. This app written in
 ## Demo
 
 <p align="center">
- <img src="https://github.com/argadeva/FamsChat-ReactNative-Firebase/raw/master/demo/demo.gif" />
+ <img src="https://github.com/argadeva/FamsChat-ReactNative-Firebase/raw/master/demo/login.gif" />
+ <img src="https://github.com/argadeva/FamsChat-ReactNative-Firebase/raw/master/demo/checkout.gif" />
+ <img src="https://github.com/argadeva/FamsChat-ReactNative-Firebase/raw/master/demo/fitur.gif" />
 </p>
 
 ## How To Install
